@@ -15,7 +15,7 @@ class ExpressiveTests: XCTestCase {
     func extract<V>(action: V -> ()) -> Expression {
         return Expression.Capture(Lambda.Implementation.Builtin { _, value in
             action(value.getBuiltin(V))
-            return Value.Void
+            return .Return(Value.Void)
         })
     }
     
@@ -72,9 +72,47 @@ class ExpressiveTests: XCTestCase {
                     .Invoke(lambda: append, argument: .Invoke(lambda: .Lookup(["next"]), argument: .Return(Value.Void)))
                 ])
             ))
-            ]).run()
+        ]).run()
         
         XCTAssertEqual([8, 9, 10], values)
+    }
+    
+    func testRecursion() {
+        var result: Int!
+        
+        Program(declarations: [
+            // factorial :: Int -> Int = lambda x (if (equals x 0) (lambda _ 1) (lambda _ (multiply x (factorial (add x (negate 1))))))
+            "global.factorial.Int:Int" : .Capture(.Virtual(argumentName: "x", declarations: [], value: Expression.MultiArgInvoke(
+                lambda: .Lookup(["global.if.Bool:T:T:T"]),
+                arguments: [
+                    .MultiArgInvoke(lambda: .Lookup(["global.equals.Int:Int:Bool"]), arguments: [.Lookup(["x"]), .Return(.Builtin(0))]),
+                    .Capture(.Virtual(argumentName: "_", declarations: [], value: .Return(.Builtin(1)))),
+                    .Capture(.Virtual(argumentName: "_", declarations: [], value: .MultiArgInvoke(
+                        lambda: .Lookup(["global.multiply.Int:Int:Int"]),
+                        arguments: [
+                            .Lookup(["x"]),
+                            .Invoke(
+                                lambda: .Lookup(["global.factorial.Int:Int"]),
+                                argument: .MultiArgInvoke(
+                                    lambda: .Lookup(["global.add.Int:Int:Int"]),
+                                    arguments: [
+                                        .Lookup(["x"]),
+                                        .Invoke(lambda: .Lookup(["global.negate.Int:Int"]), argument: .Return(.Builtin(1)))
+                                    ]
+                                )
+                            )
+                        ]
+                    )))
+                ]
+            ))),
+            
+            // main :: _ -> _ = lambda _ (print (factorial 5))
+            "global.main.Void:Void" : .Capture(.Virtual(argumentName: "_", declarations: [], value:
+                .Invoke(lambda: extract{ result = $0 as Int }, argument: .Invoke(lambda: .Lookup(["global.factorial.Int:Int"]), argument: .Return(.Builtin(5))))
+            ))
+        ]).run()
+        
+        XCTAssertEqual(120, result)
     }
     
     func testRecord() {

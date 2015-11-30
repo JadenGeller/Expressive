@@ -9,9 +9,9 @@
 public class Lambda {
     public enum Implementation {
         case Virtual(argumentName: String, declarations: [String], value: Expression)
-        case Builtin((Environment, Value) -> Value)
+        case Builtin((Environment, Value) -> Expression)
         
-        public static func MultiArgBuiltin(argumentNames argumentNames: [String], builtin: Environment -> Value) -> Implementation {
+        public static func MultiArgBuiltin(argumentNames argumentNames: [String], builtin: Environment -> Expression) -> Implementation {
             if argumentNames.count == 1 {
                 return .Virtual(argumentName: argumentNames.first!, declarations: [], value:
                     .Invoke(lambda: .Capture(Lambda.Implementation.Builtin { (environment, value) in builtin(environment) }), argument: .Return(.Void))
@@ -32,11 +32,11 @@ public class Lambda {
         self.environment = environment
     }
     
-    public convenience init(builtin: (Environment, Value) -> Value) {
+    public convenience init(builtin: (Environment, Value) -> Expression) {
         self.init(implementation: .Builtin(builtin))
     }
     
-    public convenience init(argumentNames: [String], builtin: Environment -> Value) {
+    public convenience init(argumentNames: [String], builtin: Environment -> Expression) {
         self.init(implementation: .MultiArgBuiltin(argumentNames: argumentNames, builtin: builtin))
     }
 }
@@ -50,7 +50,7 @@ extension Lambda {
             environment.declare(identifier: argumentName, value: argument)
             return value.evaluate(environment)
         case .Builtin(let function):
-            return function(environment, argument)
+            return function(environment, argument).evaluate(environment)
         }
     }
 }
