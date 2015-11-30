@@ -83,7 +83,7 @@ class ExpressiveTests: XCTestCase {
         Program(declarations: [
             // factorial :: Int -> Int = lambda x (if (equals x 0) (lambda _ 1) (lambda _ (multiply x (factorial (add x (negate 1))))))
             "global.factorial.Int:Int" : .Capture(.Virtual(argumentName: "x", declarations: [], value: Expression.MultiArgInvoke(
-                lambda: .Lookup(["global.if.Bool:T:T:T"]),
+                lambda: .Lookup(["global.if.Bool:(Void.T):(Void.T):T"]),
                 arguments: [
                     .MultiArgInvoke(lambda: .Lookup(["global.equals.Int:Int:Bool"]), arguments: [.Lookup(["x"]), .Return(.Builtin(0))]),
                     .Capture(.Virtual(argumentName: "_", declarations: [], value: .Return(.Builtin(1)))),
@@ -113,6 +113,38 @@ class ExpressiveTests: XCTestCase {
         ]).run()
         
         XCTAssertEqual(120, result)
+    }
+    
+    func testLoop() {
+        var count = 0
+        
+        Program(declarations: [
+            // main :: _ -> _ = lambda _ (sequence (assign x 10) (while (lambda _ (not (equal x 0))) (lambda _ (sequence (assign x (add x (negate 1))) (print ())))))
+            "global.main.Void:Void" : .Capture(.Virtual(argumentName: "_", declarations: ["x"], value:
+                .Sequence([
+                    .Assign(identifiers: ["x"], value: .Return(10)),
+                    .MultiArgInvoke(lambda: .Lookup(["global.while.(Void:Bool):(Void:T):Void"]), arguments: [
+                        .Capture(.Virtual(argumentName: "_", declarations: [], value:
+                            .Invoke(lambda: .Lookup(["global.not.Bool:Bool"]), argument:
+                                .MultiArgInvoke(lambda: .Lookup(["global.equals.Int:Int:Bool"]), arguments: [
+                                    .Lookup(["x"]),
+                                    .Return(0)
+                                ])
+                            )
+                        )),
+                        .Capture(.Virtual(argumentName: "_", declarations: [], value: .Sequence([
+                            .Assign(identifiers: ["x"], value: .MultiArgInvoke(lambda: .Lookup(["global.add.Int:Int:Int"]), arguments: [
+                                .Lookup(["x"]),
+                                .Invoke(lambda: .Lookup(["global.negate.Int:Int"]), argument: .Return(1))
+                            ])),
+                            .Invoke(lambda: extract{ count++ }, argument: .Return(Value.Void))
+                        ])))
+                    ])
+                ])
+            ))
+        ]).run()
+        
+        XCTAssertEqual(10, count)
     }
     
     func testRecord() {

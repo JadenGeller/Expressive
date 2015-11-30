@@ -47,6 +47,11 @@ extension Environment {
             return .Return(Value.Builtin(-value.getBuiltin(Int)))
         }))
         
+        // not :: Int -> Int
+        global.declare(identifier: "global.not.Bool:Bool", value: .Builtin(Lambda { _, value in
+            return .Return(Value.Builtin(!value.getBuiltin(Bool)))
+        }))
+        
         // add :: Int -> Int -> Int
         global.declare(identifier: "global.add.Int:Int:Int", value: .Builtin(Lambda(argumentNames: ["lhs", "rhs"]) { environment in
             return .Return(.Builtin(environment["lhs"].getBuiltin(Int) + environment["rhs"].getBuiltin(Int)))
@@ -63,13 +68,35 @@ extension Environment {
         }))
         
         // if :: Bool -> (() -> T) -> (() -> T) -> T
-        global.declare(identifier: "global.if.Bool:T:T:T", value: .Builtin(Lambda(argumentNames: ["condition", "trueCapture", "falseCapture"]) { environment in
+        global.declare(identifier: "global.if.Bool:(Void.T):(Void.T):T", value: .Builtin(Lambda(argumentNames: ["condition", "trueCapture", "falseCapture"]) { environment in
             return .Invoke(
                 lambda: .Return(environment["condition"].getBuiltin(Bool) ? environment["trueCapture"] : environment["falseCapture"]),
                 argument: .Return(Value.Void)
             )
         }))
         // Note that if all types are reference types behind the scenes, we don't need duplicate `condition` implementations.
+        
+        // while :: (() -> Bool) -> (() -> T) -> ()
+        global.declare(identifier: "global.while.(Void:Bool):(Void:T):Void", value: Expression.Capture(.MultiArgVirtual(
+            argumentNames: ["conditionCapture", "actionCapture"],
+            declarations: [],
+            value: .MultiArgInvoke(
+                lambda: .Lookup(["global.if.Bool:(Void.T):(Void.T):T"]),
+                arguments: [
+                    .Invoke(lambda: .Lookup(["conditionCapture"]), argument: .Return(Value.Void)),
+                    .Capture(.Virtual(argumentName: "_", declarations: [], value:
+                        .Sequence([
+                            .Invoke(lambda: .Lookup(["actionCapture"]), argument: .Return(Value.Void)),
+                            .MultiArgInvoke(
+                                lambda: .Lookup(["global.while.(Void:Bool):(Void:T):Void"]),
+                                arguments: [.Lookup(["conditionCapture"]), .Lookup(["actionCapture"])]
+                            )
+                            ])
+                    )),
+                    .Capture(.Virtual(argumentName: "_", declarations: [], value: .Return(Value.Void)))
+                ]
+            )
+        )).evaluate(global))
         
         return global
     }

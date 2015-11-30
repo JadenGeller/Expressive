@@ -22,6 +22,16 @@ public class Lambda {
                 )
             }
         }
+        
+        public static func MultiArgVirtual(argumentNames argumentNames: [String], declarations: [String], value: Expression) -> Implementation {
+            if argumentNames.count == 1 {
+                return .Virtual(argumentName: argumentNames.first!, declarations: declarations, value: value)
+            } else {
+                return .Virtual(argumentName: argumentNames.first!, declarations: [], value:
+                    .Capture(MultiArgVirtual(argumentNames: Array(argumentNames.dropFirst()), declarations: declarations, value: value))
+                )
+            }
+        }
     }
 
     private let implementation: Implementation
