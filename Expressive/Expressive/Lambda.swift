@@ -8,16 +8,16 @@
 
 public class Lambda {
     public enum Implementation {
-        case Virtual(argumentName: String, declarations: [String], value: Expression)
+        case Derived(argumentName: String, declarations: [String], value: Expression)
         case Builtin((Environment, Value) -> Expression)
         
         public static func MultiArgBuiltin(argumentNames argumentNames: [String], builtin: Environment -> Expression) -> Implementation {
             if argumentNames.count == 1 {
-                return .Virtual(argumentName: argumentNames.first!, declarations: [], value:
+                return .Derived(argumentName: argumentNames.first!, declarations: [], value:
                     .Invoke(lambda: .Capture(Lambda.Implementation.Builtin { (environment, value) in builtin(environment) }), argument: .Return(.Void))
                 )
             } else {
-                return .Virtual(argumentName: argumentNames.first!, declarations: [], value:
+                return .Derived(argumentName: argumentNames.first!, declarations: [], value:
                     .Capture(MultiArgBuiltin(argumentNames: Array(argumentNames.dropFirst()), builtin: builtin))
                 )
             }
@@ -25,9 +25,9 @@ public class Lambda {
         
         public static func MultiArgVirtual(argumentNames argumentNames: [String], declarations: [String], value: Expression) -> Implementation {
             if argumentNames.count == 1 {
-                return .Virtual(argumentName: argumentNames.first!, declarations: declarations, value: value)
+                return .Derived(argumentName: argumentNames.first!, declarations: declarations, value: value)
             } else {
-                return .Virtual(argumentName: argumentNames.first!, declarations: [], value:
+                return .Derived(argumentName: argumentNames.first!, declarations: [], value:
                     .Capture(MultiArgVirtual(argumentNames: Array(argumentNames.dropFirst()), declarations: declarations, value: value))
                 )
             }
@@ -55,7 +55,7 @@ extension Lambda {
     internal func invoke(argument: Value) -> Value {
         let environment = Environment(parent: self.environment)
         switch implementation {
-        case .Virtual(let argumentName, let declarations, let value):
+        case .Derived(let argumentName, let declarations, let value):
             declarations.forEach { environment.declare(identifier: $0) }
             environment.declare(identifier: argumentName, value: argument)
             return value.evaluate(environment)

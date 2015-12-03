@@ -84,7 +84,7 @@ extension Environment {
                 lambda: .Lookup(["global.if.Bool:(Void.T):(Void.T):T"]),
                 arguments: [
                     .Invoke(lambda: .Lookup(["conditionCapture"]), argument: .Return(Value.Void)),
-                    .Capture(.Virtual(argumentName: "_", declarations: [], value:
+                    .Capture(.Derived(argumentName: "_", declarations: [], value:
                         .Sequence([
                             .Invoke(lambda: .Lookup(["actionCapture"]), argument: .Return(Value.Void)),
                             .MultiArgInvoke(
@@ -93,7 +93,7 @@ extension Environment {
                             )
                             ])
                     )),
-                    .Capture(.Virtual(argumentName: "_", declarations: [], value: .Return(Value.Void)))
+                    .Capture(.Derived(argumentName: "_", declarations: [], value: .Return(Value.Void)))
                 ]
             )
         )).evaluate(global))
