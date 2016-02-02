@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		4D82EBBF1C015BF3002CAE07 /* Expressive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D82EBB41C015BF3002CAE07 /* Expressive.framework */; };
 		4D82EBC41C015BF3002CAE07 /* ExpressiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82EBC31C015BF3002CAE07 /* ExpressiveTests.swift */; };
-		4D82EBD31C015C03002CAE07 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82EBCE1C015C03002CAE07 /* Program.swift */; };
-		4D82EBD41C015C03002CAE07 /* Lambda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82EBCF1C015C03002CAE07 /* Lambda.swift */; };
-		4D82EBD51C015C03002CAE07 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82EBD01C015C03002CAE07 /* Environment.swift */; };
-		4D82EBD61C015C03002CAE07 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82EBD11C015C03002CAE07 /* Expression.swift */; };
-		4D82EBD71C015C03002CAE07 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82EBD21C015C03002CAE07 /* Value.swift */; };
+		4DD9ADB41C611F2E00252595 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD9ADB31C611F2E00252595 /* Environment.swift */; };
+		4DD9ADB61C611F3200252595 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD9ADB51C611F3200252595 /* Expression.swift */; };
+		4DD9ADB81C611F3600252595 /* Lambda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD9ADB71C611F3600252595 /* Lambda.swift */; };
+		4DD9ADBA1C611F3A00252595 /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD9ADB91C611F3A00252595 /* Program.swift */; };
+		4DD9ADBC1C611F3E00252595 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD9ADBB1C611F3E00252595 /* Value.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,11 +32,11 @@
 		4D82EBBE1C015BF3002CAE07 /* ExpressiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExpressiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D82EBC31C015BF3002CAE07 /* ExpressiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressiveTests.swift; sourceTree = "<group>"; };
 		4D82EBC51C015BF3002CAE07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4D82EBCE1C015C03002CAE07 /* Program.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
-		4D82EBCF1C015C03002CAE07 /* Lambda.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lambda.swift; sourceTree = "<group>"; };
-		4D82EBD01C015C03002CAE07 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
-		4D82EBD11C015C03002CAE07 /* Expression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
-		4D82EBD21C015C03002CAE07 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
+		4DD9ADB31C611F2E00252595 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Environment.swift; path = ../../Sources/Environment.swift; sourceTree = "<group>"; };
+		4DD9ADB51C611F3200252595 /* Expression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Expression.swift; path = ../../Sources/Expression.swift; sourceTree = "<group>"; };
+		4DD9ADB71C611F3600252595 /* Lambda.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Lambda.swift; path = ../../Sources/Lambda.swift; sourceTree = "<group>"; };
+		4DD9ADB91C611F3A00252595 /* Program.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Program.swift; path = ../../Sources/Program.swift; sourceTree = "<group>"; };
+		4DD9ADBB1C611F3E00252595 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Value.swift; path = ../../Sources/Value.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,11 +80,11 @@
 			isa = PBXGroup;
 			children = (
 				4D82EBB91C015BF3002CAE07 /* Info.plist */,
-				4D82EBCE1C015C03002CAE07 /* Program.swift */,
-				4D82EBD01C015C03002CAE07 /* Environment.swift */,
-				4D82EBCF1C015C03002CAE07 /* Lambda.swift */,
-				4D82EBD11C015C03002CAE07 /* Expression.swift */,
-				4D82EBD21C015C03002CAE07 /* Value.swift */,
+				4DD9ADB91C611F3A00252595 /* Program.swift */,
+				4DD9ADB31C611F2E00252595 /* Environment.swift */,
+				4DD9ADB71C611F3600252595 /* Lambda.swift */,
+				4DD9ADB51C611F3200252595 /* Expression.swift */,
+				4DD9ADBB1C611F3E00252595 /* Value.swift */,
 			);
 			path = Expressive;
 			sourceTree = "<group>";
@@ -205,11 +205,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D82EBD41C015C03002CAE07 /* Lambda.swift in Sources */,
-				4D82EBD51C015C03002CAE07 /* Environment.swift in Sources */,
-				4D82EBD71C015C03002CAE07 /* Value.swift in Sources */,
-				4D82EBD31C015C03002CAE07 /* Program.swift in Sources */,
-				4D82EBD61C015C03002CAE07 /* Expression.swift in Sources */,
+				4DD9ADB81C611F3600252595 /* Lambda.swift in Sources */,
+				4DD9ADB41C611F2E00252595 /* Environment.swift in Sources */,
+				4DD9ADBA1C611F3A00252595 /* Program.swift in Sources */,
+				4DD9ADBC1C611F3E00252595 /* Value.swift in Sources */,
+				4DD9ADB61C611F3200252595 /* Expression.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +398,7 @@
 				4D82EBCA1C015BF3002CAE07 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4D82EBCB1C015BF3002CAE07 /* Build configuration list for PBXNativeTarget "ExpressiveTests" */ = {
 			isa = XCConfigurationList;
@@ -406,6 +407,7 @@
 				4D82EBCD1C015BF3002CAE07 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
