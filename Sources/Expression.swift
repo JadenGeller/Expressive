@@ -13,7 +13,9 @@ indirect public enum Expression {
     case Capture(Lambda.Implementation)
     case Invoke(lambda: Expression, argument: Expression)
     case Sequence([Expression])
-    
+}
+
+extension Expression {
     public static func MultiArgInvoke(lambda lambda: Expression, arguments: [Expression]) -> Expression {
         if arguments.count == 1 {
             return .Invoke(lambda: lambda, argument: arguments.first!)
