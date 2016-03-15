@@ -7,33 +7,6 @@
 //
 
 public class Lambda {
-    public enum Implementation {
-        case Derived(argumentName: String, declarations: [String], value: Expression)
-        case Builtin((Environment, Value) -> Expression)
-        
-        public static func MultiArgBuiltin(argumentNames argumentNames: [String], builtin: Environment -> Expression) -> Implementation {
-            if argumentNames.count == 1 {
-                return .Derived(argumentName: argumentNames.first!, declarations: [], value:
-                    .Invoke(lambda: .Capture(Lambda.Implementation.Builtin { (environment, value) in builtin(environment) }), argument: .Return(.Void))
-                )
-            } else {
-                return .Derived(argumentName: argumentNames.first!, declarations: [], value:
-                    .Capture(MultiArgBuiltin(argumentNames: Array(argumentNames.dropFirst()), builtin: builtin))
-                )
-            }
-        }
-        
-        public static func MultiArgVirtual(argumentNames argumentNames: [String], declarations: [String], value: Expression) -> Implementation {
-            if argumentNames.count == 1 {
-                return .Derived(argumentName: argumentNames.first!, declarations: declarations, value: value)
-            } else {
-                return .Derived(argumentName: argumentNames.first!, declarations: [], value:
-                    .Capture(MultiArgVirtual(argumentNames: Array(argumentNames.dropFirst()), declarations: declarations, value: value))
-                )
-            }
-        }
-    }
-
     private let implementation: Implementation
     private let environment: Environment?
     
@@ -41,7 +14,40 @@ public class Lambda {
         self.implementation = implementation
         self.environment = environment
     }
+}
+
+extension Lambda {
+    public enum Implementation {
+        case Derived(argumentName: String, declarations: [String], value: Expression)
+        case Builtin((Environment, Value) -> Expression)
+    }
+}
+
+extension Lambda.Implementation {
+    public static func MultiArgBuiltin(argumentNames argumentNames: [String], builtin: Environment -> Expression) -> Lambda.Implementation {
+        if argumentNames.count == 1 {
+            return .Derived(argumentName: argumentNames.first!, declarations: [], value:
+                .Invoke(lambda: .Capture(Lambda.Implementation.Builtin { (environment, value) in builtin(environment) }), argument: .Return(.Void))
+            )
+        } else {
+            return .Derived(argumentName: argumentNames.first!, declarations: [], value:
+                .Capture(MultiArgBuiltin(argumentNames: Array(argumentNames.dropFirst()), builtin: builtin))
+            )
+        }
+    }
     
+    public static func MultiArgVirtual(argumentNames argumentNames: [String], declarations: [String], value: Expression) -> Lambda.Implementation {
+        if argumentNames.count == 1 {
+            return .Derived(argumentName: argumentNames.first!, declarations: declarations, value: value)
+        } else {
+            return .Derived(argumentName: argumentNames.first!, declarations: [], value:
+                .Capture(MultiArgVirtual(argumentNames: Array(argumentNames.dropFirst()), declarations: declarations, value: value))
+            )
+        }
+    }
+}
+
+extension Lambda {
     public convenience init(builtin: (Environment, Value) -> Expression) {
         self.init(implementation: .Builtin(builtin))
     }
