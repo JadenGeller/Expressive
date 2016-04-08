@@ -18,7 +18,7 @@ public class Lambda {
 
 extension Lambda {
     public enum Implementation {
-        case Derived(argumentName: String, declarations: [String], value: Expression)
+        case Derived(argumentName: String?, declarations: [String], value: Expression)
         case Builtin((Environment, Value) -> Expression)
     }
 }
@@ -63,7 +63,9 @@ extension Lambda {
         switch implementation {
         case .Derived(let argumentName, let declarations, let value):
             declarations.forEach { environment.declare(identifier: $0) }
-            environment.declare(identifier: argumentName, value: argument)
+            if let argumentName = argumentName {
+                environment.declare(identifier: argumentName, value: argument)
+            }
             return value.evaluate(environment)
         case .Builtin(let function):
             return function(environment, argument).evaluate(environment)
